@@ -30,7 +30,7 @@ public class MyService extends Service {
 		Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
 		Log.d(APP_TAG, "event received in service: " + new Date().toString());
 		addNotification();
-		return Service.START_STICKY;
+		return Service.START_NOT_STICKY;
 	}
 	
 	public class MyBinder extends Binder {
