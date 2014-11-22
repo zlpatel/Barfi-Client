@@ -8,5 +8,9 @@
     <string name="action_settings">Settings</string>
     <string name="service_name">Barfi Service</string>
     <string name="service_status_monitor">Barfi Service Status</string>
+    <string name="Authenticate">Authenticate</string>
+    <string name="deleteDB">Delete DataBase</string>
+    <string name="start_monitoring">Start Monitoring</string>
+    
     
 </resources>

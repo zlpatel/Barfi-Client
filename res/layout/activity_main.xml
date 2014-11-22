@@ -8,19 +8,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.barfi.android.MainActivity" >
 
-    <TextView
-        android:id="@+id/tvNotification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
-    <Button
-        android:id="@+id/buttonOk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvNotification"
-        android:layout_below="@+id/tvNotification"
-        android:layout_marginTop="47dp"
-        android:text="OK" />
+        <Button
+            android:id="@+id/buttonMonitoring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/start_monitoring" />
 
 </RelativeLayout>

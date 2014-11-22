@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
@@ -18,69 +19,82 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-	private Button btnOk;
-	private TextView tvNotification;
-	private IntentFilter intentFilter;
-    private ServiceConnection m_serviceConnection;
+	private Button btnMonitoring;
+	private ServiceConnection m_serviceConnection;
 	private MyService m_service;
+	private SharedPreferences pref;
+	Database database;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		btnOk=(Button)findViewById(R.id.buttonOk);
-		tvNotification=(TextView)findViewById(R.id.tvNotification);
-		
+		btnMonitoring=(Button)findViewById(R.id.buttonMonitoring);
+		pref = getSharedPreferences("AppPref", MODE_PRIVATE);
+		database=Database.getDatabaseInstance(this);
 		 m_serviceConnection = new ServiceConnection() {
 			
 			@Override
 			public void onServiceDisconnected(ComponentName name) {
-				// TODO Auto-generated method stub
 				m_service = null;
 			}
 			
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
-				// TODO Auto-generated method stub
 				m_service = ((MyService.MyBinder)service).getService();
 			}
 		};
 		
-		btnOk.setOnClickListener(this);		
+		btnMonitoring.setOnClickListener(this);	
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		
+		switch(item.getItemId()){
+		
+		case R.id.deleteDB:
+			deleteDatabase();
+		break;
+	
+	}	
+	return false;
+		
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.buttonOk:
-			Intent newIntent=new Intent(this,MyService.class);
-			startService(newIntent);
-			bindService(newIntent, m_serviceConnection, BIND_AUTO_CREATE);
+		case R.id.buttonMonitoring:
+			setPreferenceForButtonClick();
+			startMyService();
 			break;
-
 		default:
 			break;
 		}
 		
+	}
+
+	private void deleteDatabase() {
+		database.deleteDB();
+	}
+
+	private void setPreferenceForButtonClick() {
+		SharedPreferences.Editor edit = pref.edit();
+        //Storing Data using SharedPreferences
+       edit.putBoolean("SERVICE_ALREADY_STARTED",true);
+       edit.commit();
+	}
+
+	private void startMyService() {
+		Intent newIntent=new Intent(MainActivity.this,MyService.class);
+		startService(newIntent);
+		bindService(newIntent, m_serviceConnection, BIND_AUTO_CREATE);
 	}
 }
