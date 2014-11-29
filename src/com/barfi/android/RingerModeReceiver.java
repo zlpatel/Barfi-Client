@@ -28,7 +28,7 @@ public class RingerModeReceiver extends BroadcastReceiver {
 	private static double longitude;
 	private static LocationManager locationManager;
 	private SharedPreferences pref;
-	
+
 	private static LocationListener locationListener = new LocationListener() {
 		@Override
 		public void onLocationChanged(Location location) {
@@ -122,7 +122,7 @@ public class RingerModeReceiver extends BroadcastReceiver {
 	public void onReceive(Context ctx, Intent intent) {
 
 		context = ctx;
-		
+
 		pref = context.getSharedPreferences("AppPref", Context.MODE_PRIVATE);
 		AudioManager am = (AudioManager) ctx
 				.getSystemService(Context.AUDIO_SERVICE);
@@ -134,22 +134,22 @@ public class RingerModeReceiver extends BroadcastReceiver {
 		switch (am.getRingerMode()) {
 		case AudioManager.RINGER_MODE_SILENT:
 			createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
-					getLongitude(),getDayOfWeek());
+					getLongitude(), getDayOfWeek());
 			break;
 		case AudioManager.RINGER_MODE_VIBRATE:
 			createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
-					getLongitude(),getDayOfWeek());
+					getLongitude(), getDayOfWeek());
 			break;
 		case AudioManager.RINGER_MODE_NORMAL:
 			createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
-					getLongitude(),getDayOfWeek());
+					getLongitude(), getDayOfWeek());
 			break;
 
 		}
 	}
 
 	private void createJSONObject(int ringerMode, String dateTime,
-			double latitude, double longitude,int dayOfWeek) {
+			double latitude, double longitude, int dayOfWeek) {
 		JSONObject newObj = new JSONObject();
 		try {
 			newObj.put("action", ringerMode);
@@ -159,17 +159,17 @@ public class RingerModeReceiver extends BroadcastReceiver {
 			newObj.put("longitude", longitude);
 			newObj.put("user", pref.getString("Email", ""));
 			SendJSON send = new SendJSON();
-			send.sendJson(newObj, Const.SERVER_ADDRESS+"action/events/");
+			send.sendJson(newObj, Const.SERVER_ADDRESS + "action/events/");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private int getDayOfWeek(){
+	private int getDayOfWeek() {
 		Calendar c = Calendar.getInstance();
-		return c.get(Calendar.DAY_OF_WEEK);		
+		return c.get(Calendar.DAY_OF_WEEK);
 	}
-	
+
 	private String getDateTime() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());

@@ -133,12 +133,11 @@ public class Authentication extends Activity {
 				Log.i("Token", "Access Token retrieved:" + token);
 				// Toast.makeText(getApplicationContext(),"Access Token is "
 				// +token, Toast.LENGTH_SHORT).show();
-				try{
+				try {
 					database.insertUserData(mEmail, token);
-				}catch(SQLiteException e){
+				} catch (SQLiteException e) {
 					Log.e("sqlite", e.getMessage());
 				}
-				
 
 				JSONObject newObj = new JSONObject();
 				try {
@@ -146,15 +145,15 @@ public class Authentication extends Activity {
 					newObj.put("email", mEmail);
 					newObj.put("is_staff", true);
 					SendJSON send = new SendJSON();
-					send.sendJson(newObj, Const.SERVER_ADDRESS+"users/");
+					send.sendJson(newObj, Const.SERVER_ADDRESS + "users/");
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 				goToMainActivity();
-//				select.setText(pref.getString("Email", "")
-//						+ " is Authenticated");
+				// select.setText(pref.getString("Email", "")
+				// + " is Authenticated");
 			}
 			new GoogleCalender().execute(
 					"https://www.googleapis.com/calendar/v3/calendars/",
@@ -227,8 +226,8 @@ public class Authentication extends Activity {
 						newObj.put("user", pref.getString("Email", ""));
 
 						SendJSON send = new SendJSON();
-						send.sendJson(newObj,
-								Const.SERVER_ADDRESS+"calendar/events/");
+						send.sendJson(newObj, Const.SERVER_ADDRESS
+								+ "calendar/events/");
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

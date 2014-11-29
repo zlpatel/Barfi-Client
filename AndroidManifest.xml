@@ -7,32 +7,31 @@
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
- 
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>   
-    
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:icon="@drawable/barfi_icon"
-        android:label="@string/app_name" 
-        android:theme="@android:style/Theme.DeviceDefault">
-        
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.DeviceDefault" >
         <uses-library android:name="com.google.android.maps" />
-        
-        <service android:name="com.barfi.android.MyService">
+
+        <service android:name="com.barfi.android.MyService" >
         </service>
-        
-		<receiver
-            android:name="com.barfi.android.MyReceiver">
+        <service android:name="com.barfi.android.SchedulerEventService" >
+        </service>
+
+        <receiver android:name="com.barfi.android.MyReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-            
         <receiver
             android:name="com.barfi.android.RingerModeReceiver"
             android:permission="android.permission.MODIFY_AUDIO_SETTINGS" >
@@ -40,25 +39,28 @@
                 <action android:name="android.media.RINGER_MODE_CHANGED" />
             </intent-filter>
         </receiver>
-        
+
         <activity
             android:name="com.barfi.android.Authentication"
-            android:label="@string/app_name" 
-            >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="com.google.android.gms.version"
-           android:value="@integer/google_play_services_version" />
-        
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name="com.barfi.android.MainActivity"
-            android:label="@string/app_name">
-            
+            android:label="@string/app_name" >
         </activity>
+
+        <receiver android:name="com.barfi.android.SchedulerEventReceiver" >
+        </receiver>
     </application>
 
 </manifest>

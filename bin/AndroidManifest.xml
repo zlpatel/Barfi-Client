@@ -24,6 +24,8 @@
         
         <service android:name="com.barfi.android.MyService">
         </service>
+        <service android:name="com.barfi.android.SchedulerEventService">
+        </service>
         
 		<receiver
             android:name="com.barfi.android.MyReceiver">
@@ -59,6 +61,9 @@
             android:label="@string/app_name">
             
         </activity>
+        
+        <receiver android:name="com.barfi.android.SchedulerEventReceiver" >
+            </receiver>
     </application>
 
 </manifest>

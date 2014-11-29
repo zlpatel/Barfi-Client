@@ -1,9 +1,14 @@
 package com.barfi.android;
 
+import java.util.Calendar;
+
 import com.barfi.android.R;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -24,28 +29,28 @@ public class MainActivity extends Activity implements OnClickListener {
 	private MyService m_service;
 	private SharedPreferences pref;
 	Database database;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		btnMonitoring=(Button)findViewById(R.id.buttonMonitoring);
+		btnMonitoring = (Button) findViewById(R.id.buttonMonitoring);
 		pref = getSharedPreferences("AppPref", MODE_PRIVATE);
-		database=Database.getDatabaseInstance(this);
-		 m_serviceConnection = new ServiceConnection() {
-			
+		database = Database.getDatabaseInstance(this);
+		m_serviceConnection = new ServiceConnection() {
+
 			@Override
 			public void onServiceDisconnected(ComponentName name) {
 				m_service = null;
 			}
-			
+
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
-				m_service = ((MyService.MyBinder)service).getService();
+				m_service = ((MyService.MyBinder) service).getService();
 			}
 		};
-		
-		btnMonitoring.setOnClickListener(this);	
+
+		btnMonitoring.setOnClickListener(this);
 	}
 
 	@Override
@@ -56,16 +61,16 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		switch(item.getItemId()){
-		
+
+		switch (item.getItemId()) {
+
 		case R.id.deleteDB:
 			deleteDatabase();
-		break;
-	
-	}	
-	return false;
-		
+			break;
+
+		}
+		return false;
+
 	}
 
 	@Override
@@ -78,7 +83,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		default:
 			break;
 		}
-		
+
 	}
 
 	private void deleteDatabase() {
@@ -87,14 +92,15 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	private void setPreferenceForButtonClick() {
 		SharedPreferences.Editor edit = pref.edit();
-        //Storing Data using SharedPreferences
-       edit.putBoolean("SERVICE_ALREADY_STARTED",true);
-       edit.commit();
+		// Storing Data using SharedPreferences
+		edit.putBoolean("SERVICE_ALREADY_STARTED", true);
+		edit.commit();
 	}
 
 	private void startMyService() {
-		Intent newIntent=new Intent(MainActivity.this,MyService.class);
+		Intent newIntent = new Intent(MainActivity.this, MyService.class);
 		startService(newIntent);
 		bindService(newIntent, m_serviceConnection, BIND_AUTO_CREATE);
 	}
+
 }
