@@ -68,11 +68,11 @@ public class Database {
 		}		
 	}
     
-    protected void insertUserData(String eMail,String accessToken){   	
+    protected void insertUserData(String eMail,String accessToken) throws SQLiteException{   	
     	db.execSQL( "insert into "+Const.KEY_TABLE+" ("+Const.KEY_EMAIL+","+Const.KEY_ACCESS_TOKEN+") values ("+"\""+eMail+"\","+"\""+accessToken+"\" );" );   	
     }
     
-    protected void closeDB(){
+    protected void closeDB() throws SQLiteException{
     	db.close();
     }
     

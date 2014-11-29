@@ -16,6 +16,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +31,6 @@ public class Authentication extends Activity {
 
 	com.google.android.gms.common.SignInButton select;
 
-//	Button select;
 	String[] avail_accounts;
 	private AccountManager mAccountManager;
 	ListView list;
@@ -58,7 +58,6 @@ public class Authentication extends Activity {
 
 				@Override
 				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
 					if (avail_accounts.length != 0) {
 						accountDialog = new Dialog(Authentication.this,
 								R.style.DialogBoxStyle);
@@ -88,13 +87,11 @@ public class Authentication extends Activity {
 					}
 				}
 			});
-			database.createTable(this);
 		}
 	}
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		database.closeDB();
 	}
@@ -136,7 +133,12 @@ public class Authentication extends Activity {
 				Log.i("Token", "Access Token retrieved:" + token);
 				// Toast.makeText(getApplicationContext(),"Access Token is "
 				// +token, Toast.LENGTH_SHORT).show();
-				database.insertUserData(mEmail, token);
+				try{
+					database.insertUserData(mEmail, token);
+				}catch(SQLiteException e){
+					Log.e("sqlite", e.getMessage());
+				}
+				
 
 				JSONObject newObj = new JSONObject();
 				try {
@@ -165,6 +167,7 @@ public class Authentication extends Activity {
 			try {
 				token = GoogleAuthUtil.getToken(Authentication.this, mEmail,
 						"oauth2:https://www.googleapis.com/auth/calendar");
+				database.createTable(Authentication.this);
 			} catch (IOException transientEx) {
 				// Network or server error, try later
 				Log.e("IOException", transientEx.toString());
@@ -199,7 +202,6 @@ public class Authentication extends Activity {
 			ParseJSON parser = new ParseJSON();
 			JSONObject jObj2 = parser.getJSONFromUrl(urls[0] + urls[2]
 					+ "/events" + urls[1]);
-			Log.i("hey!", jObj2.toString());
 			return jObj2;
 		}
 
@@ -227,14 +229,10 @@ public class Authentication extends Activity {
 						SendJSON send = new SendJSON();
 						send.sendJson(newObj,
 								Const.SERVER_ADDRESS+"calendar/events/");
-
 					}
-
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-//				Toast.makeText(Authentication.this, result.toString(),
-//						Toast.LENGTH_LONG).show();
 			}
 		}
 	}

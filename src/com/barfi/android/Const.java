@@ -9,5 +9,5 @@ public class Const {
 	public static String KEY_TABLE = "user_access_details";
 	public static String KEY_EMAIL="email";
 	public static String KEY_ACCESS_TOKEN="access_token";
-	public static String SERVER_ADDRESS="http://192.168.0.5:8001/";
+	public static String SERVER_ADDRESS="http://10.144.155.141:8001/";
 }
