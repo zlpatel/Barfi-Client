@@ -1,2 +1,8 @@
+.gitignore
+proguard-project.txt
+project.properties
 *.class
 bin/
+*.class
+bin/
+README.md
