@@ -23,13 +23,14 @@
 
         <service android:name="com.barfi.android.MyService" >
         </service>
-        <service android:name="com.barfi.android.SchedulerEventService" >
+        <service android:name="com.barfi.android.SchedulerEventService" 
+            android:permission="android.permission.MODIFY_AUDIO_SETTINGS">
         </service>
 
         <receiver android:name="com.barfi.android.MyReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
+                <!-- <action android:name="android.intent.action.USER_PRESENT" /> -->
             </intent-filter>
         </receiver>
         <receiver

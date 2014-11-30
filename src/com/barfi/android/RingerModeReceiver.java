@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.widget.Toast;
 
 public class RingerModeReceiver extends BroadcastReceiver {
 	private static Location location;
@@ -124,28 +125,33 @@ public class RingerModeReceiver extends BroadcastReceiver {
 		context = ctx;
 
 		pref = context.getSharedPreferences("AppPref", Context.MODE_PRIVATE);
-		AudioManager am = (AudioManager) ctx
-				.getSystemService(Context.AUDIO_SERVICE);
+		
+		if (pref.getBoolean("SERVICE_ALREADY_STARTED", false)) {
+		
+			AudioManager am = (AudioManager) ctx
+					.getSystemService(Context.AUDIO_SERVICE);
 
-		setupGPS();
-		startLocating();
-		stopGPS();
+			setupGPS();
+			startLocating();
+			stopGPS();
 
-		switch (am.getRingerMode()) {
-		case AudioManager.RINGER_MODE_SILENT:
-			createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
-					getLongitude(), getDayOfWeek());
-			break;
-		case AudioManager.RINGER_MODE_VIBRATE:
-			createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
-					getLongitude(), getDayOfWeek());
-			break;
-		case AudioManager.RINGER_MODE_NORMAL:
-			createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
-					getLongitude(), getDayOfWeek());
-			break;
+			switch (am.getRingerMode()) {
+			case AudioManager.RINGER_MODE_SILENT:
+				createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
+						getLongitude(), getDayOfWeek());
+				break;
+			case AudioManager.RINGER_MODE_VIBRATE:
+				createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
+						getLongitude(), getDayOfWeek());
+				break;
+			case AudioManager.RINGER_MODE_NORMAL:
+				createJSONObject(am.getRingerMode(), getDateTime(), getLatitude(),
+						getLongitude(), getDayOfWeek());
+				break;
 
+			}
 		}
+		
 	}
 
 	private void createJSONObject(int ringerMode, String dateTime,

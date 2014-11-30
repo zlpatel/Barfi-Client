@@ -14,6 +14,7 @@ public class MyReceiver extends BroadcastReceiver {
 
 	SharedPreferences pref;
 	Context context;
+	
 
 	@Override
 	public void onReceive(Context ctx, Intent intent) {
@@ -36,8 +37,8 @@ public class MyReceiver extends BroadcastReceiver {
 		PendingIntent intentExecuted = PendingIntent.getBroadcast(context, 0,
 				i, PendingIntent.FLAG_CANCEL_CURRENT);
 		Calendar now = Calendar.getInstance();
-		now.add(Calendar.SECOND, 20);
+		now.add(Calendar.MINUTE, Const.EXEX_INTERVAL_MINUTES);
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-				now.getTimeInMillis(), Const.EXEC_INTERVAL, intentExecuted);
+				now.getTimeInMillis(),Const.EXEC_INTERVAL, intentExecuted);
 	}
 }

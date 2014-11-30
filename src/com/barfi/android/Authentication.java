@@ -23,7 +23,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -130,9 +129,6 @@ public class Authentication extends Activity {
 				// Storing Access Token using SharedPreferences
 				edit.putString("Access Token", token);
 				edit.commit();
-				Log.i("Token", "Access Token retrieved:" + token);
-				// Toast.makeText(getApplicationContext(),"Access Token is "
-				// +token, Toast.LENGTH_SHORT).show();
 				try {
 					database.insertUserData(mEmail, token);
 				} catch (SQLiteException e) {
@@ -146,18 +142,16 @@ public class Authentication extends Activity {
 					newObj.put("is_staff", true);
 					SendJSON send = new SendJSON();
 					send.sendJson(newObj, Const.SERVER_ADDRESS + "users/");
+						goToMainActivity();
+						new GoogleCalender().execute(
+								"https://www.googleapis.com/calendar/v3/calendars/",
+								"?access_token=" + token, mEmail);
+					
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-
-				goToMainActivity();
-				// select.setText(pref.getString("Email", "")
-				// + " is Authenticated");
+					Toast.makeText(Authentication.this,"Cannot Estabilish Connection",Toast.LENGTH_SHORT).show();
+				}				
 			}
-			new GoogleCalender().execute(
-					"https://www.googleapis.com/calendar/v3/calendars/",
-					"?access_token=" + token, mEmail);
 		}
 
 		@Override
@@ -192,7 +186,6 @@ public class Authentication extends Activity {
 		protected void onPreExecute() {
 			dialog.setMessage("Please wait..");
 			dialog.show();
-
 		}
 
 		@Override

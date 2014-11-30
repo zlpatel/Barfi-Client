@@ -1,5 +1,4 @@
 package com.barfi.android;
-
 import java.io.InputStream;
 
 import org.apache.http.HttpResponse;
@@ -12,8 +11,10 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SendJSON {
 
@@ -47,9 +48,10 @@ public class SendJSON {
 																			// entity
 					}
 
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					e.printStackTrace();
-					Log.d("Error", "Cannot Estabilish Connection");
+					Log.d("error","Cannot Estabilish Connection");
 				}
 
 				Looper.loop(); // Loop in the message queue

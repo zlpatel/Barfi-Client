@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private MyService m_service;
 	private SharedPreferences pref;
 	Database database;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,11 +79,25 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.buttonMonitoring:
 			setPreferenceForButtonClick();
 			startMyService();
+			startRepeatingService();
 			break;
 		default:
 			break;
 		}
 
+	}
+	
+	private void startRepeatingService() {
+		AlarmManager alarmManager = (AlarmManager) this
+				.getSystemService(Context.ALARM_SERVICE);
+		Intent i = new Intent(this, SchedulerEventReceiver.class); // explicit
+																		// intent
+		PendingIntent intentExecuted = PendingIntent.getBroadcast(this, 0,
+				i, PendingIntent.FLAG_CANCEL_CURRENT);
+		Calendar now = Calendar.getInstance();
+		now.add(Calendar.MINUTE, Const.EXEX_INTERVAL_MINUTES);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+				now.getTimeInMillis(),Const.EXEC_INTERVAL, intentExecuted);
 	}
 
 	private void deleteDatabase() {
