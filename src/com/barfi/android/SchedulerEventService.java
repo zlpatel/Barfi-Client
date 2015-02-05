@@ -22,6 +22,7 @@ import android.widget.Toast;
 public class SchedulerEventService extends Service {
 	private static final String APP_TAG = "com.barfi.android.scheduler";
 	SharedPreferences pref;
+	AudioManager am;
 	@Override
 	public IBinder onBind(final Intent intent) {
 		return null;
@@ -32,13 +33,9 @@ public class SchedulerEventService extends Service {
 			final int startId) {
 		pref = getSharedPreferences("AppPref", MODE_PRIVATE);
 		String username = pref.getString("Email", "").split("@")[0];
-		new ParsingJSON().execute(Const.SERVER_ADDRESS+"api/prediction?username="+username+"&time="+getDateTime());
-//		AudioManager am = (AudioManager) this
-//				.getSystemService(Context.AUDIO_SERVICE);
-//		am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-//		Toast.makeText(getApplicationContext(), "started at :" + new Date(),
-//				Toast.LENGTH_LONG).show();
-//		Log.d(APP_TAG, "event received in service: " + new Date().toString());
+		new ParsingJSON().execute(Const.SERVER_ADDRESS+"api/prediction/?username="+username+"&time="+getDateTime());
+		am= (AudioManager) this
+				.getSystemService(Context.AUDIO_SERVICE);
 		return Service.START_NOT_STICKY;
 	}
 	
@@ -66,7 +63,23 @@ public class SchedulerEventService extends Service {
 				try {
 					boolean performAction=result.getBoolean("takeAction");
 					int action=result.getInt("action");
-					Toast.makeText(SchedulerEventService.this, "performAction : "+performAction +" \nAction to take : "+action, Toast.LENGTH_LONG).show();
+					if(performAction){
+						switch (action) {
+						case 0:
+							am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+							break;
+						case 1:
+							am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+							break;
+						case 2:
+							am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+							break;
+
+						default:
+							break;
+						}
+					}
+//					Toast.makeText(SchedulerEventService.this, "performAction : "+performAction +" \nAction to take : "+action, Toast.LENGTH_LONG).show();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -77,7 +90,7 @@ public class SchedulerEventService extends Service {
 	
 	private String getDateTime() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+				Const.DATE_TIME_FORMAT, Locale.getDefault());
 		Date date = new Date();
 		return dateFormat.format(date);
 	}

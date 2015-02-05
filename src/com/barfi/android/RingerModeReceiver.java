@@ -178,7 +178,7 @@ public class RingerModeReceiver extends BroadcastReceiver {
 
 	private String getDateTime() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+				Const.DATE_TIME_FORMAT, Locale.getDefault());
 		Date date = new Date();
 		return dateFormat.format(date);
 	}

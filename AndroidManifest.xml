@@ -26,6 +26,8 @@
         <service android:name="com.barfi.android.SchedulerEventService" 
             android:permission="android.permission.MODIFY_AUDIO_SETTINGS">
         </service>
+        <service android:name="com.barfi.android.CalendarSyncService">
+        </service>
 
         <receiver android:name="com.barfi.android.MyReceiver" >
             <intent-filter>
@@ -61,6 +63,8 @@
         </activity>
 
         <receiver android:name="com.barfi.android.SchedulerEventReceiver" >
+        </receiver>
+        <receiver android:name="com.barfi.android.CalendarSyncReceiver" >
         </receiver>
     </application>
 

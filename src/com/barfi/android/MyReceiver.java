@@ -37,8 +37,8 @@ public class MyReceiver extends BroadcastReceiver {
 		PendingIntent intentExecuted = PendingIntent.getBroadcast(context, 0,
 				i, PendingIntent.FLAG_CANCEL_CURRENT);
 		Calendar now = Calendar.getInstance();
-		now.add(Calendar.MINUTE, Const.EXEX_INTERVAL_MINUTES);
+		now.add(Calendar.MINUTE, Const.EXEX_MINUTES);
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-				now.getTimeInMillis(),Const.EXEC_INTERVAL, intentExecuted);
+				now.getTimeInMillis(),Const.EXEC_INTERVAL_MINUTES, intentExecuted);
 	}
 }

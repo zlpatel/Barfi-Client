@@ -79,7 +79,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.buttonMonitoring:
 			setPreferenceForButtonClick();
 			startMyService();
-			startRepeatingService();
+			startCalendarSyncService();
+			startPollingService();
 			break;
 		default:
 			break;
@@ -87,7 +88,20 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	}
 	
-	private void startRepeatingService() {
+	private void startCalendarSyncService() {
+		AlarmManager alarmManager = (AlarmManager) this
+				.getSystemService(Context.ALARM_SERVICE);
+		Intent i = new Intent(this, CalendarSyncReceiver.class); // explicit
+																		// intent
+		PendingIntent intentExecuted = PendingIntent.getBroadcast(this, 0,
+				i, PendingIntent.FLAG_CANCEL_CURRENT);
+		Calendar now = Calendar.getInstance();
+		now.add(Calendar.MINUTE, Const.EXEX_MINUTES);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+				now.getTimeInMillis(),Const.EXEC_INTERVAL_MINUTES, intentExecuted);
+	}
+	
+	private void startPollingService() {
 		AlarmManager alarmManager = (AlarmManager) this
 				.getSystemService(Context.ALARM_SERVICE);
 		Intent i = new Intent(this, SchedulerEventReceiver.class); // explicit
@@ -95,9 +109,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		PendingIntent intentExecuted = PendingIntent.getBroadcast(this, 0,
 				i, PendingIntent.FLAG_CANCEL_CURRENT);
 		Calendar now = Calendar.getInstance();
-		now.add(Calendar.MINUTE, Const.EXEX_INTERVAL_MINUTES);
+		now.add(Calendar.MINUTE, Const.EXEX_MINUTES);
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-				now.getTimeInMillis(),Const.EXEC_INTERVAL, intentExecuted);
+				now.getTimeInMillis(),Const.EXEC_INTERVAL_MINUTES, intentExecuted);
 	}
 
 	private void deleteDatabase() {

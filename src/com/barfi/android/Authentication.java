@@ -36,6 +36,7 @@ public class Authentication extends Activity {
 	ArrayAdapter<String> adapter;
 	SharedPreferences pref;
 	Database database;
+	String syncToken;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class Authentication extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		database.closeDB();
+//		database.closeDB();
 	}
 
 	private String[] getAccountNames() {
@@ -142,11 +143,17 @@ public class Authentication extends Activity {
 					newObj.put("is_staff", true);
 					SendJSON send = new SendJSON();
 					send.sendJson(newObj, Const.SERVER_ADDRESS + "users/");
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 						goToMainActivity();
 						new GoogleCalender().execute(
 								"https://www.googleapis.com/calendar/v3/calendars/",
 								"?access_token=" + token, mEmail);
-					
+						
 				} catch (JSONException e) {
 					e.printStackTrace();
 					Toast.makeText(Authentication.this,"Cannot Estabilish Connection",Toast.LENGTH_SHORT).show();
@@ -203,6 +210,20 @@ public class Authentication extends Activity {
 
 			if (result != null) {
 				try {
+					String nextSyncToken=result.getString("nextSyncToken");
+//					SharedPreferences.Editor edit = pref.edit();
+//					// Storing Access Token using SharedPreferences
+//					edit.putString("Sync Token", nextSyncToken);
+//					edit.commit();
+					
+					try {
+						database.updateNextSyncToken(pref.getString("Email", ""), nextSyncToken);
+					} catch (SQLiteException e) {
+						Log.e("sqlite", e.getMessage());
+					}
+										
+//					Toast.makeText(Authentication.this, nextSyncToken, Toast.LENGTH_LONG).show();
+					
 					JSONArray arr = result.getJSONArray("items");
 					for (int i = 0; i < arr.length(); i++) {
 
